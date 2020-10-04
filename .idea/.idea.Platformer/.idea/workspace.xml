@@ -32,8 +32,8 @@
         <option value="$PROJECT_DIR$/Assets/Player_2d.cs" />
         <option value="$PROJECT_DIR$/Assets/Bullet.cs" />
         <option value="$PROJECT_DIR$/Assets/Weapon.cs" />
-        <option value="$PROJECT_DIR$/Assets/SimpleJump/Scripts/Player.cs" />
         <option value="$PROJECT_DIR$/Assets/PlayerInput.cs" />
+        <option value="$PROJECT_DIR$/Assets/SimpleJump/Scripts/Player.cs" />
       </list>
     </option>
   </component>
@@ -83,7 +83,7 @@
       <option name="presentableId" value="Default" />
       <updated>1601748424147</updated>
       <workItem from="1601748435056" duration="12244000" />
-      <workItem from="1601839359000" duration="3274000" />
+      <workItem from="1601839359000" duration="4061000" />
     </task>
     <servers />
   </component>
