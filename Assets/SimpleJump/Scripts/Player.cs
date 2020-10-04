@@ -21,7 +21,7 @@ using Unity.Mathematics;
  * */
 public class Player : MonoBehaviour
 {
-    [SerializeField] enum Direction
+    public enum Direction
     {
         Nope,
         Left,
@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 40f;
     private int airJumpCount;
     private int airJumpCountMax;
-    
+
     private void Awake()
     {
         // playerBase = gameObject.GetComponent<Player_Base>();
@@ -55,26 +55,10 @@ public class Player : MonoBehaviour
             airJumpCount = 0;
         }
         
-        if (Input.GetKey(KeyCode.Space))
-        {
-            if (IsGrounded())
-            {
-                rigidbody2d.velocity = Vector2.up * jumpVelocity;
-            }
-            else
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                    if (airJumpCount < airJumpCountMax)
-                    {
-                        rigidbody2d.velocity = Vector2.up * jumpVelocity;
-                        airJumpCount++;
-                    }
-            }
-        }
-        HandleMovement_FullMidAirControl();
-        //HandleMovement_SomeMidAirControl();
-        //HandleMovement_NoMidAirControl();
+    }
 
+    void Animate()
+    {
         // Set Animations
         // if (IsGrounded()) {
         //     if (rigidbody2d.velocity.x == 0) {
@@ -87,6 +71,28 @@ public class Player : MonoBehaviour
         // }
     }
 
+    public void Jump(float _jump)
+    {
+        // if (Input.GetKey(KeyCode.Space))
+        if (_jump>0)
+        {
+            if (IsGrounded())
+            {
+                rigidbody2d.velocity = Vector2.up * jumpVelocity;
+            }
+            else
+            {
+                // if (Input.GetKeyDown(KeyCode.Space))
+                if (_jump>.5f)
+                    if (airJumpCount < airJumpCountMax)
+                    {
+                        rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                        airJumpCount++;
+                    }
+            }
+        }
+    }
+    
     private bool IsGrounded()
     {
         var raycastHit2d = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size, 0f, Vector2.down,
@@ -94,25 +100,25 @@ public class Player : MonoBehaviour
         return raycastHit2d.collider != null;
     }
 
-    private void HandleMovement_FullMidAirControl()
+    public void HandleMovement_FullMidAirControl(float _moveDir)
     {
-        if (GetDirection() == Direction.Left)
+        if (GetDirection(_moveDir) == Direction.Left)
         {
             rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
         }
         else
         {
-            if (GetDirection() == Direction.Right)
+            if (GetDirection(_moveDir) == Direction.Right)
                 rigidbody2d.velocity = new Vector2(+moveSpeed, rigidbody2d.velocity.y);
             else // No keys pressed
                 rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
         }
     }
 
-    private void HandleMovement_SomeMidAirControl()
+    private void HandleMovement_SomeMidAirControl(float _moveDir)
     {
         var midAirControl = 3f;
-        if (GetDirection() == Direction.Left)
+        if (GetDirection(_moveDir) == Direction.Left)
         {
             if (IsGrounded())
             {
@@ -127,7 +133,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (GetDirection() == Direction.Right)
+            if (GetDirection(_moveDir) == Direction.Right)
             {
                 if (IsGrounded())
                 {
@@ -148,19 +154,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void HandleMovement_NoMidAirControl()
+    private void HandleMovement_NoMidAirControl(float _moveDir)
     {
         if (IsGrounded())
         {
             // Input.GetKey(KeyCode.LeftArrow) 
-            if (GetDirection() == Direction.Left)
+            if (GetDirection(_moveDir) == Direction.Left)
             {
                 rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
             }
             else
             {
                 // Input.GetKey(KeyCode.RightArrow
-                if (GetDirection() == Direction.Right)
+                if (GetDirection(_moveDir) == Direction.Right)
                     rigidbody2d.velocity = new Vector2(+moveSpeed, rigidbody2d.velocity.y);
                 else // No keys pressed
                     rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
@@ -168,14 +174,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    private Direction GetDirection()
+    public Direction GetDirection(float _moveDir)
     {
-        if (Input.GetAxisRaw("Horizontal") < 0)
+        // if (Input.GetAxisRaw("Horizontal") < 0)
+        if (_moveDir < 0)
         {
             _direction = Direction.Left;
             Flip(1);
         }
-        else if (Input.GetAxisRaw("Horizontal") > 0)
+        // else if (Input.GetAxisRaw("Horizontal") > 0)
+        else if (_moveDir > 0)
         {
             _direction = Direction.Right;
             Flip(0);

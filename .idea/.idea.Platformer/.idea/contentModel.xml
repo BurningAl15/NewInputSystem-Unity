@@ -141,6 +141,10 @@
         </e>
         <e p="Player_2d.cs" t="Include" />
         <e p="PlayerBase_2d.cs" t="Include" />
+        <e p="PlayerInput.cs" t="Include" />
+        <e p="Scripts" t="Include">
+          <e p="PlayerActionControls.cs" t="Include" />
+        </e>
         <e p="SimpleJump" t="Include">
           <e p="Scripts" t="Include">
             <e p="Player.cs" t="Include" />

@@ -24,17 +24,21 @@ public class Weapon : MonoBehaviour
         line.SetPosition(1, firePoint.position);
     }
     
-    private void Update()
-    {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            if (_shootType == ShootType.Instantiation)
-                Shoot_I();
-            else
-                StartCoroutine(Shoot());
-        }
-    }
+    // private void Update()
+    // {
+    //     if (Input.GetButtonDown("Fire1"))
+    //     {
+    //     }
+    // }
 
+    public void Shooting()
+    {
+        if (_shootType == ShootType.Instantiation)
+            Shoot_I();
+        else
+            StartCoroutine(Shoot());
+    }
+    
     private void Shoot_I()
     {
         Vector3 firepointRotation = firePoint.rotation.eulerAngles;
