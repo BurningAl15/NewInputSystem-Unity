@@ -15,6 +15,7 @@ using UnityEngine;
 using V_AnimationSystem;
 using CodeMonkey.Utils;
 using Unity.Mathematics;
+using Random = UnityEngine.Random;
 
 /*
  * Simple Jump
@@ -33,7 +34,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask platformsLayerMask;
 
     // private Player_Base playerBase;
-    private Rigidbody2D rigidbody2d;
+    private Rigidbody2D rgb;
     private BoxCollider2D boxCollider2d;
     [SerializeField] private float jumpVelocity = 100f;
     [SerializeField] private float moveSpeed = 40f;
@@ -43,7 +44,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         // playerBase = gameObject.GetComponent<Player_Base>();
-        rigidbody2d = transform.GetComponent<Rigidbody2D>();
+        rgb = transform.GetComponent<Rigidbody2D>();
         boxCollider2d = transform.GetComponent<BoxCollider2D>();
         airJumpCountMax = 2;
     }
@@ -78,7 +79,7 @@ public class Player : MonoBehaviour
         {
             if (IsGrounded())
             {
-                rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                rgb.velocity = Vector2.up * jumpVelocity;
             }
             else
             {
@@ -86,7 +87,7 @@ public class Player : MonoBehaviour
                 if (_jump>.5f)
                     if (airJumpCount < airJumpCountMax)
                     {
-                        rigidbody2d.velocity = Vector2.up * jumpVelocity;
+                        rgb.velocity = Vector2.up * jumpVelocity;
                         airJumpCount++;
                     }
             }
@@ -104,14 +105,14 @@ public class Player : MonoBehaviour
     {
         if (GetDirection(_moveDir) == Direction.Left)
         {
-            rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
+            rgb.velocity = new Vector2(-moveSpeed, rgb.velocity.y);
         }
         else
         {
             if (GetDirection(_moveDir) == Direction.Right)
-                rigidbody2d.velocity = new Vector2(+moveSpeed, rigidbody2d.velocity.y);
+                rgb.velocity = new Vector2(+moveSpeed, rgb.velocity.y);
             else // No keys pressed
-                rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+                rgb.velocity = new Vector2(0, rgb.velocity.y);
         }
     }
 
@@ -122,13 +123,13 @@ public class Player : MonoBehaviour
         {
             if (IsGrounded())
             {
-                rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
+                rgb.velocity = new Vector2(-moveSpeed, rgb.velocity.y);
             }
             else
             {
-                rigidbody2d.velocity += new Vector2(-moveSpeed * midAirControl * Time.deltaTime, 0);
-                rigidbody2d.velocity = new Vector2(Mathf.Clamp(rigidbody2d.velocity.x, -moveSpeed, +moveSpeed),
-                    rigidbody2d.velocity.y);
+                rgb.velocity += new Vector2(-moveSpeed * midAirControl * Time.deltaTime, 0);
+                rgb.velocity = new Vector2(Mathf.Clamp(rgb.velocity.x, -moveSpeed, +moveSpeed),
+                    rgb.velocity.y);
             }
         }
         else
@@ -137,19 +138,19 @@ public class Player : MonoBehaviour
             {
                 if (IsGrounded())
                 {
-                    rigidbody2d.velocity = new Vector2(+moveSpeed, rigidbody2d.velocity.y);
+                    rgb.velocity = new Vector2(+moveSpeed, rgb.velocity.y);
                 }
                 else
                 {
-                    rigidbody2d.velocity += new Vector2(+moveSpeed * midAirControl * Time.deltaTime, 0);
-                    rigidbody2d.velocity = new Vector2(Mathf.Clamp(rigidbody2d.velocity.x, -moveSpeed, +moveSpeed),
-                        rigidbody2d.velocity.y);
+                    rgb.velocity += new Vector2(+moveSpeed * midAirControl * Time.deltaTime, 0);
+                    rgb.velocity = new Vector2(Mathf.Clamp(rgb.velocity.x, -moveSpeed, +moveSpeed),
+                        rgb.velocity.y);
                 }
             }
             else
             {
                 // No keys pressed
-                if (IsGrounded()) rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+                if (IsGrounded()) rgb.velocity = new Vector2(0, rgb.velocity.y);
             }
         }
     }
@@ -161,15 +162,15 @@ public class Player : MonoBehaviour
             // Input.GetKey(KeyCode.LeftArrow) 
             if (GetDirection(_moveDir) == Direction.Left)
             {
-                rigidbody2d.velocity = new Vector2(-moveSpeed, rigidbody2d.velocity.y);
+                rgb.velocity = new Vector2(-moveSpeed, rgb.velocity.y);
             }
             else
             {
                 // Input.GetKey(KeyCode.RightArrow
                 if (GetDirection(_moveDir) == Direction.Right)
-                    rigidbody2d.velocity = new Vector2(+moveSpeed, rigidbody2d.velocity.y);
+                    rgb.velocity = new Vector2(+moveSpeed, rgb.velocity.y);
                 else // No keys pressed
-                    rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
+                    rgb.velocity = new Vector2(0, rgb.velocity.y);
             }
         }
     }
@@ -196,5 +197,14 @@ public class Player : MonoBehaviour
     void Flip(int _direction){
         // transform.localScale=new Vector2(_direction,1);
         transform.rotation=Quaternion.Euler(0,180*_direction,0);
+    }
+    
+    public void ApplyForce(Vector3 _direction)
+    {
+        var heading = transform.position - _direction;
+        var distance = heading.magnitude;
+        var direction = heading / distance;
+        direction.y = 5f;
+        rgb.AddForce(new Vector2(direction.x * 250, direction.y * Random.Range(50, 100)), ForceMode2D.Force);
     }
 }

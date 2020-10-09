@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class @PlayerActionControls : IInputActionCollection, IDisposable
+public class @PlayersActionControls : IInputActionCollection, IDisposable
 {
     public InputActionAsset asset { get; }
-    public @PlayerActionControls()
+    public @PlayersActionControls()
     {
         asset = InputActionAsset.FromJson(@"{
     ""name"": ""PlayerInput"",
@@ -255,8 +255,8 @@ public class @PlayerActionControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player1_Shoot;
     public struct Player1Actions
     {
-        private @PlayerActionControls m_Wrapper;
-        public Player1Actions(@PlayerActionControls wrapper) { m_Wrapper = wrapper; }
+        private @PlayersActionControls m_Wrapper;
+        public Player1Actions(@PlayersActionControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player1_Move;
         public InputAction @Jump => m_Wrapper.m_Player1_Jump;
         public InputAction @Shoot => m_Wrapper.m_Player1_Shoot;
@@ -304,8 +304,8 @@ public class @PlayerActionControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player2_Shoot;
     public struct Player2Actions
     {
-        private @PlayerActionControls m_Wrapper;
-        public Player2Actions(@PlayerActionControls wrapper) { m_Wrapper = wrapper; }
+        private @PlayersActionControls m_Wrapper;
+        public Player2Actions(@PlayersActionControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player2_Move;
         public InputAction @Jump => m_Wrapper.m_Player2_Jump;
         public InputAction @Shoot => m_Wrapper.m_Player2_Shoot;

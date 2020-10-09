@@ -6,35 +6,58 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
-    [SerializeField] private PlayerActionControls playerActionControls;
+    public enum PlayerNumber
+    {
+        Player_1,Player_2
+    }
+
+    public PlayerNumber _playerNumber;
+    
+    [SerializeField] private PlayersActionControls playersActionControls;
 
     [SerializeField] private Player _player;
     [SerializeField] private Weapon _weapon;
 
     private void Awake()
     {
-        playerActionControls=new PlayerActionControls();
+        playersActionControls = new PlayersActionControls();
     }
 
     private void Start()
     {
-        playerActionControls.Player.Jump.performed += ctx => _player.Jump(ctx.ReadValue<float>());
-        playerActionControls.Player.Shoot.performed += ctx => _weapon.Shooting();
+        if (_playerNumber == PlayerNumber.Player_1)
+        {
+            playersActionControls.Player1.Jump.performed += ctx => _player.Jump(ctx.ReadValue<float>());
+            playersActionControls.Player1.Shoot.performed += ctx => _weapon.Shooting();
+        }
+        else if(_playerNumber==PlayerNumber.Player_2)
+        {
+            playersActionControls.Player2.Jump.performed += ctx => _player.Jump(ctx.ReadValue<float>());
+            playersActionControls.Player2.Shoot.performed += ctx => _weapon.Shooting();
+        }
     }
 
     private void OnEnable()
     {
-        playerActionControls.Enable();
+        playersActionControls.Enable();
     }
 
     private void OnDisable()
     {
-        playerActionControls.Disable();
+        playersActionControls.Disable();
     }
 
     private void Update()
     {
-        float movementInput = playerActionControls.Player.Move.ReadValue<float>();
-        _player.HandleMovement_FullMidAirControl(movementInput);
+        if (_playerNumber == PlayerNumber.Player_1)
+        {
+            float movementInput = playersActionControls.Player1.Move.ReadValue<float>();
+            _player.HandleMovement_FullMidAirControl(movementInput);            
+        }
+        else if(_playerNumber==PlayerNumber.Player_2)
+        {
+            float movementInput = playersActionControls.Player2.Move.ReadValue<float>();
+            _player.HandleMovement_FullMidAirControl(movementInput);            
+        }
     }
 }

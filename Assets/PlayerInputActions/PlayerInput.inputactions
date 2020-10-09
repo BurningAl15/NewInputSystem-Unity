@@ -1,8 +1,8 @@
 {
-    "name": "New Controls",
+    "name": "PlayerInput",
     "maps": [
         {
-            "name": "Player",
+            "name": "Player1",
             "id": "7a8ba69c-1d61-4c5c-874a-741445bd9556",
             "actions": [
                 {
@@ -85,11 +85,87 @@
                     "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player2",
+            "id": "f125e5cd-9c60-4446-abb0-c028cfc596f7",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Button",
+                    "id": "739979dd-eecb-40ad-be7e-91992fe576cd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "0e7601fa-c904-434b-8b1c-319fffd6e256",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "814d439e-9dc6-43c2-a856-2324e0637603",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "Sideways",
+                    "id": "b2662e72-a21d-49f8-8c45-b6e71d99815c",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "7a707672-5667-49cc-baa1-58d29bfd5ecc",
+                    "path": "<Keyboard>/numpad4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "da324c65-1158-4237-9725-29158b53fa06",
+                    "path": "<Keyboard>/numpad6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
-                    "id": "9e997bf9-4039-4161-a595-499440418d64",
-                    "path": "<Mouse>/leftButton",
+                    "id": "c9b08278-c06f-4939-bb7c-439d9a485da9",
+                    "path": "<Keyboard>/numpad8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "88e84979-e2ac-4fb3-b9db-6616ab5be965",
+                    "path": "<Keyboard>/numpad7",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

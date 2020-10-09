@@ -9,65 +9,58 @@ public class Weapon : MonoBehaviour
     public enum ShootType
     {
         Instantiation,
-        Raycasting
     }
 
     public ShootType _shootType;
 
     public Transform firePoint;
     [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private LineRenderer line;
     [SerializeField] private float angleChangeRatio;
-    private void Awake()
+    private float timer = 0;
+    private bool canShoot = false;
+
+    [Range(0,.5f)]
+    [SerializeField] private float timeBetweenShoots;
+
+    [SerializeField] PlayerInput.PlayerNumber _playerNumber;
+
+    private void Start()
     {
-        line.SetPosition(0, firePoint.position);
-        line.SetPosition(1, firePoint.position);
+        _playerNumber = GetComponent<PlayerInput>()._playerNumber;
     }
-    
-    // private void Update()
-    // {
-    //     if (Input.GetButtonDown("Fire1"))
-    //     {
-    //     }
-    // }
+
+
+    private void Update()
+    {
+        if (canShoot)
+        {
+            timer += Time.deltaTime;
+            if (timer >= timeBetweenShoots)
+            {
+                canShoot = false;
+                timer = 0;
+            }
+        }
+    }
 
     public void Shooting()
     {
-        if (_shootType == ShootType.Instantiation)
-            Shoot_I();
-        else
-            StartCoroutine(Shoot());
+        if (!canShoot)
+        {
+            if (_shootType == ShootType.Instantiation)
+            {
+                Shoot_I();
+                canShoot = true;
+            }
+        }
     }
     
     private void Shoot_I()
     {
         Vector3 firepointRotation = firePoint.rotation.eulerAngles;
-        Quaternion rotation = Quaternion.Euler(firepointRotation.x, firepointRotation.y, firepointRotation.z+Random.Range(-angleChangeRatio,angleChangeRatio));
+        Quaternion rotation = Quaternion.Euler(firepointRotation.x, firepointRotation.y,
+            firepointRotation.z + 3f + Random.Range(-angleChangeRatio, angleChangeRatio));
         GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, rotation);
-        
-    }
-
-    private IEnumerator Shoot()
-    {
-        var hitInfo = Physics2D.Raycast(firePoint.localPosition, firePoint.right);
-
-        if (hitInfo)
-        {
-            //fill info about enemies or stuff here
-
-            line.SetPosition(0, firePoint.localPosition);
-            line.SetPosition(1, hitInfo.point);
-        }
-        else
-        {
-            line.SetPosition(0, firePoint.localPosition);
-            line.SetPosition(1, firePoint.localPosition + firePoint.right * 100);
-        }
-
-        line.enabled = true;
-
-        yield return 0;
-
-        line.enabled = false;
+        tempBullet.GetComponent<Bullet>().Init(_playerNumber);
     }
 }
